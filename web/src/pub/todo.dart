@@ -1,12 +1,13 @@
 import 'dart:html';
-import 'dart:json';
+import 'json.dart';
+import 'package:js/js.dart' as js;
 
 void handleSubmit(Event e) {
   e.preventDefault();
   var input = query("#new-todo input");
   var todoText = input.value;
   if (!todoText.isEmpty) {
-    var data = "{'todo': '$todoText'}"; //JSON.stringify({'todo': todoText});
+    var data = JSON.stringify({'todo': todoText});
     var request = new HttpRequest();
 
 
@@ -26,11 +27,11 @@ void handleSubmit(Event e) {
         } else {
           alert = new Element.tag("div");
           alert.attributes['class'] = 'alert alert-error';
-          var button = new Element.tag("button");
-          button.attributes['type'] = 'button';
-          button.attributes['class'] = 'close';
-          button.attributes['data-dismiss'] = 'alert';
-          button.text = "&times;";
+          var button = new Element.tag("button")
+            ..attributes['type'] = 'button'
+            ..attributes['class'] = 'close'
+            ..attributes['data-dismiss'] = 'alert'
+            ..text = "&times;";
           alert.children.add(button);
           alert.text = "Failed to save Todo!";
         }
@@ -38,7 +39,7 @@ void handleSubmit(Event e) {
       }
     });
 
-    request.open("POST", "/todos");
+    request.open("POST", "/todos?payload=$data");
     request.send(data);
   }
 }
