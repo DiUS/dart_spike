@@ -2,19 +2,32 @@ import 'dart:io';
 import '../lib/samplenoun_controller.dart';
 import 'package:/logging/logging.dart';
 
-  
-  send404(HttpResponse response) {
-    response.statusCode = HttpStatus.NOT_FOUND;
-    //support HTTP 1.0
-    response.contentLength = 19;
-    response.outputStream.writeString("404: File not found");
-    response.outputStream.close();
-  }
- 
 
+send404(HttpResponse response) {
+  response.statusCode = HttpStatus.NOT_FOUND;
+//support HTTP 1.0
+  response.contentLength = 19;
+  response.outputStream.writeString("404: File not found");
+  response.outputStream.close();
+}
 
-  
-  startServer() {
+var mimeTypes = {
+  'html': 'text/html',
+  'css':  'text/css',
+  'js':   'application/javascript',
+  'dart': 'application/dart'
+};
+
+respondWithFile(File file, requestPath, HttpResponse response) {
+  var path = new Path(file.fullPathSync());
+  var mimeType = mimeTypes[path.extension];
+  mimeType = mimeType != null ? mimeType : 'text/plain';
+  print("$requestPath --> $path [$mimeType]");
+  response.headers.contentType = new ContentType.fromString(mimeType);
+  file.openInputStream().pipe(response.outputStream);
+}
+
+startServer() {
     Logger root = Logger.root;
     root.level = Level.INFO;
     root.info("here is a logging message");
@@ -24,15 +37,14 @@ import 'package:/logging/logging.dart';
     var server = new HttpServer();
     server.listen('127.0.0.1', 8080);
     server.defaultRequestHandler = (HttpRequest request, HttpResponse response) {
-      var path = request.path == '/' ? '/index.html' : request.path;
+      var requestPath = request.path == '/' ? '/index.html' : request.path;
 
-      var file = new File("../../web/src/pub/$path");
+      var file = new File("../../web/src/pub/$requestPath");
       if (file.existsSync()) {
-        print("$path --> ${file.fullPathSync()}");
-        file.openInputStream().pipe(response.outputStream);
+        respondWithFile(file, requestPath, response);
       } else {
       response.headers.set(HttpHeaders.ACCEPT,'application/json');
-      if(SamplenounController.isSampleNoun.hasMatch(path)){
+      if(SamplenounController.isSampleNoun.hasMatch(requestPath)){
         new SamplenounController().handleSampleNoun(request,response);
       } else{
         response.outputStream.write('{a: 5s}'.charCodes);
@@ -44,11 +56,6 @@ import 'package:/logging/logging.dart';
   }
   
   main() {
-//      Logger root = Logger.root;
-//      root.level = Level.INFO;
-
       startServer();
   }
   
-
-
