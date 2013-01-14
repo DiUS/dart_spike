@@ -1,3 +1,4 @@
 .idea/
 *.iml
 backend/packages/
+web/src/pub/packages/
