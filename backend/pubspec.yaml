@@ -1,3 +1,4 @@
 name: 'SpikeDay'
 dependencies:
-  unittest: any
+#  unittest: any
+  logging: { sdk: logging }
