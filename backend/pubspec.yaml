@@ -1,3 +1,4 @@
-name: 'SpikeDay'
+name: 'backend'
 dependencies:
   unittest: any
+  logging: any
