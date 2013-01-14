@@ -26,7 +26,7 @@ import 'package:/logging/logging.dart';
     server.defaultRequestHandler = (HttpRequest request, HttpResponse response) {
       var path = request.path == '/' ? '/index.html' : request.path;
 
-      var file = new File("../web$path");
+      var file = new File("../../web/src/pub/$path");
       if (file.existsSync()) {
         print("$path --> ${file.fullPathSync()}");
         file.openInputStream().pipe(response.outputStream);
