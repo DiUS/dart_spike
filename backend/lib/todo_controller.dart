@@ -27,11 +27,12 @@ class TodoController {
       if(request.method == 'GET'){
 
         print("the list beiung passed back ${todoList}");
+        response.contentLength = JSON.stringify(todoList).length;
         response.outputStream.write(JSON.stringify(todoList).charCodes);
       }else if (request.method == 'POST'){
 
         print("adding ${request.queryParameters["payload"]} to my list");
-        todoList[nextTodoKey++] = request.queryParameters["payload"];
+        todoList[(nextTodoKey++).toString()] = request.queryParameters["payload"];
       }
       else{
         print("it is smothing else");
