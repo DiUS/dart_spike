@@ -9,6 +9,8 @@ void handleSubmit(Event e) {
     var data = "{'todo': '$todoText'}"; //JSON.stringify({'todo': todoText});
     var request = new HttpRequest();
 
+
+
     request.on.readyStateChange.add((Event e) {
       if (request.readyState == HttpRequest.DONE) {
         var alerts = query("#alerts");

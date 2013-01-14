@@ -35,19 +35,31 @@ startServer() {
 
     print("Starting Dart server 127.0.0.1:8080");
 
+
     var server = new HttpServer();
     server.listen('127.0.0.1', 8080);
     server.defaultRequestHandler = (HttpRequest request, HttpResponse response) {
+      
+
+      print("Handling Request ${request.path}");
+     
+
+      
+
       var requestPath = request.path == '/' ? '/index.html' : request.path;
 
       var file = new File("../../web/src/pub/$requestPath");
+
       if (file.existsSync()) {
+
         respondWithFile(file, requestPath, response);
       } else {
       response.headers.set(HttpHeaders.ACCEPT,'application/json');
       if(TodoController.isTodoRequest.hasMatch(request.path)){
+
         new TodoController().handleTodo(request,response);
       } else{
+
         response.outputStream.write('{a: 5s}'.charCodes);
       }
       response.outputStream.close();
@@ -55,6 +67,17 @@ startServer() {
 
   };
   }
+
+Future<String> readStreamAsString(InputStream stream) {
+  var completer = new Completer();
+  var sb = new StringBuffer();
+  var sis = new StringInputStream(stream);
+  sis..onData = () { sb.add(sis.read()); }
+    ..onClosed = () { completer.complete(sb.toString()); }
+    ..onError = (e) { completer.completeException(e); };
+  return completer.future;
+}
+
   
   main() {
       startServer();
