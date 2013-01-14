@@ -5,9 +5,7 @@ import 'dart:json';
 import "package:json_object/json_object.dart";
 import 'package:mongo_dart/mongo_dart.dart';
 
-
 class TodoController {
-  
   
   
   static final isTodoRequest = new RegExp(r'.*todos(/.*)?');
@@ -28,8 +26,8 @@ class TodoController {
     if(isBaseTodoRequest.hasMatch(request.path)){
       if(request.method == 'GET'){
 
+        print("the list beiung passed back ${todoList}");
         response.outputStream.write(JSON.stringify(todoList).charCodes);
-        print("the list beiung passed back ${todoList.forEach((todo)=>print(todo))}");
       }else if (request.method == 'POST'){
 
         print("adding ${request.queryParameters["payload"]} to my list");
@@ -40,15 +38,6 @@ class TodoController {
       }
     }
     
-    
-    Language data = new JsonObject();
-    data.type = "hello";
-    
-    
-    
-    
-    
-    response.outputStream.write(JSON.stringify(data).charCodes);
   }
   
 

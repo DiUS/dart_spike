@@ -53,18 +53,13 @@ startServer() {
       if (file.existsSync()) {
 
         respondWithFile(file, requestPath, response);
-      } else {
-      response.headers.set(HttpHeaders.ACCEPT,'application/json');
-      if(TodoController.isTodoRequest.hasMatch(request.path)){
-
+      } else if(TodoController.isTodoRequest.hasMatch(request.path)){
+        response.headers.set(HttpHeaders.ACCEPT,'application/json');
         new TodoController().handleTodo(request,response);
+        response.outputStream.close();
       } else{
-
-        response.outputStream.write('{a: 5s}'.charCodes);
+        send404(response);
       }
-      response.outputStream.close();
-      }
-
   };
   }
 
