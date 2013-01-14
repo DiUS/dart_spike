@@ -3,6 +3,7 @@ import 'package:backend/todo_controller.dart';
 import 'package:/logging/logging.dart';
 
 
+
 send404(HttpResponse response) {
   response.statusCode = HttpStatus.NOT_FOUND;
 //support HTTP 1.0
@@ -44,7 +45,7 @@ startServer() {
         respondWithFile(file, requestPath, response);
       } else {
       response.headers.set(HttpHeaders.ACCEPT,'application/json');
-      if(TodoController.isTodoRequest.hasMatch(path)){
+      if(TodoController.isTodoRequest.hasMatch(request.path)){
         new TodoController().handleTodo(request,response);
       } else{
         response.outputStream.write('{a: 5s}'.charCodes);

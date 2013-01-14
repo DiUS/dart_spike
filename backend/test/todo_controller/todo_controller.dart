@@ -10,8 +10,8 @@ import 'package:backend/todo_controller.dart';
 
 main() {
   test('matches correct get url with id ', () =>
-      expect(TodoController.isTodoRequest.firstMatch('/todo/3')[1],
-             equals('3'))
+      expect(TodoController.isTodoRequest.hasMatch('/todo'),
+             isTrue)
   );  
   
   test('does not match incorrect url ', () =>

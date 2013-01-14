@@ -10,11 +10,29 @@ class TodoController {
   
   
   
-  static final isTodoRequest = new RegExp(r'.*todo/(.*)');
+  static final isTodoRequest = new RegExp(r'.*todo(/.*)?');
+
+  static final isCreateTodoRequest = new RegExp(r'.*todo$');
+  
+  static List todoList = new List();
   
   handleTodo(HttpRequest request, HttpResponse response){
     
     var sampleNounId = isTodoRequest.firstMatch(request.path)[1];
+    print(request.path);
+    print("matches isCreateTodoRequest ${isCreateTodoRequest.hasMatch(request.path)}");
+    
+    if(isCreateTodoRequest.hasMatch(request.path)){
+    if(request.method == 'GET'){
+      todoList.forEach((todo)=>print(todo));
+    }else if (request.method == 'POST'){
+      print("it is post");
+    }
+    else{
+      print("it is smothing else");
+    }
+    }
+    
     
     //jsonString 
     
@@ -54,6 +72,8 @@ class TodoController {
     
     Language data = new JsonObject();
     data.type = "hello";
+    
+    
     
     
     
