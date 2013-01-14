@@ -9,7 +9,7 @@ class SamplenounController {
   
   handleSampleNoun(HttpRequest request, HttpResponse response){
     
-    var sampleNounId = isSampleNoun.firstMatch(request.path)[1]
+    var sampleNounId = isSampleNoun.firstMatch(request.path)[1];
     
     //jsonString 
     
