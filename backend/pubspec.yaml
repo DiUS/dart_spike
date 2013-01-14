@@ -1,4 +1,4 @@
 name: 'backend'
 dependencies:
-  unittest: any
-  logging: any
+  #unittest: any
+  logging: { sdk: logging }
