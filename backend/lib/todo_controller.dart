@@ -10,9 +10,9 @@ class TodoController {
   
   
   
-  static final isTodoRequest = new RegExp(r'.*todo(/.*)?');
+  static final isTodoRequest = new RegExp(r'.*todos(/.*)?');
 
-  static final isCreateTodoRequest = new RegExp(r'.*todo$');
+  static final isCreateTodoRequest = new RegExp(r'.*todos$');
   
   static List todoList = new List();
   
@@ -26,7 +26,13 @@ class TodoController {
     if(request.method == 'GET'){
       todoList.forEach((todo)=>print(todo));
     }else if (request.method == 'POST'){
-      print("it is post");
+      
+      
+      _readBody(request, (body) {
+        print(body);
+      });
+      
+      print("it is post ${new StringInputStream(request.inputStream).readLine()}");
     }
     else{
       print("it is smothing else");
@@ -78,6 +84,30 @@ class TodoController {
     
     
     response.outputStream.write(JSON.stringify(data).charCodes);
+  }
+  
+  
+  _readBody(HttpRequest request, void handleBody(String body)) {
+    String bodyString = ""; // request body byte data
+    final completer = new Completer();
+    final sis = new StringInputStream(request.inputStream, Encoding.UTF_8);
+    
+    print("in read body");
+    sis.onData = (){
+      print("reading the body ${bodyString}");
+      bodyString = bodyString.concat(sis.read());
+    };
+    sis.onClosed = () {
+      print("body is finshed");
+      completer.complete("");
+    };
+    sis.onError = (Exception e) {
+      print('exeption occured : ${e.toString()}');
+    };
+    // process the request and send a response
+    completer.future.then((_){
+      handleBody(bodyString);
+    });
   }
   
  
