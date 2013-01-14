@@ -2,3 +2,8 @@ name: 'backend'
 dependencies:
   unittest: any
   logging: any
+  mongo_dart: any
+  json_object:
+    git: git://github.com/chrisbu/dartwatch-JsonObject.git
+    
+    
