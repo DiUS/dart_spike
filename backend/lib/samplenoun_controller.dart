@@ -1,31 +1,20 @@
 library samplenoun;
 
 import 'dart:io';
-import 'package:/unittest/unittest.dart';
-
 
 class SamplenounController {
   
-
   
-  
-  static final isSampleNoun = new RegExp(r'.*samplenoun////(.*)');
+  static final isSampleNoun = new RegExp(r'.*samplenoun/(.*)');
   
   handleSampleNoun(HttpRequest request, HttpResponse response){
     
+    var sampleNounId = isSampleNoun.firstMatch(request.path)[1]
+    
+    //jsonString 
     
     response.outputStream.write('{name: sampleNoun}'.charCodes);
   }
-  
-  
-}
-
-
-main() {
-  test('matches correct url ', () =>
-      expect(SamplenounController.isSampleNoun.hasMatch('//samplenoun//3'),
-          isTrue)
-  );  
   
   
 }

@@ -1,1 +1,1 @@
-{"packages":{"logging":{"version":"0.0.0-r.16761","source":"sdk","description":"logging"},"unittest":{"version":"0.0.0-r.16761","source":"sdk","description":"unittest"}}}
+{"packages":{"logging":{"version":"0.2.10+1","source":"hosted","description":"logging"},"unittest":{"version":"0.2.10+1","source":"hosted","description":"unittest"}}}
