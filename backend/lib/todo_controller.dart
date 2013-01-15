@@ -38,9 +38,6 @@ class TodoController {
     if(isBaseTodoRequest.hasMatch(request.path)) {
         if(request.method == 'GET') {
           getFromMongo(response);
-          print("the list beiung passed back ${todoList}");
-          //response.contentLength = 2000;
-          response.outputStream.write(JSON.stringify(todoList).charCodes);
         } else if (request.method == 'POST') {
 
           setIntoMongo(nextTodoKey,request.queryParameters["payload"]);
