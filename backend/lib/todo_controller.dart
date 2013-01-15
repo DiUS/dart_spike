@@ -84,6 +84,7 @@ class TodoController {
       savedBlogPost["complete"] = todo["complete"];
       _posts.insert(savedBlogPost);  //  add the post to mongodb collection
       db.close();
+      print("the saved todo is ${savedBlogPost}");
     });
 
 
@@ -128,8 +129,8 @@ class TodoController {
        print("getting stuff from mongo in future");
        DbCollection _posts = db.collection("posts");
 
-       Future onEachHasCompleted = _posts.find().each((v)=>
-         jsonObjects.add(JSON.stringify(new Todo(v))));
+       Future onEachHasCompleted = _posts.find(where.match('todoText', '.*')).each((v)=>
+         jsonObjects.add(createTodo(v).toJson()));
        
        
 
@@ -142,6 +143,12 @@ class TodoController {
     
      return completer.future;
      
+   }
+
+   createTodo(v) {
+     Todo myTodo = new Todo.fromBson(v);
+     print("created this todo ${myTodo}");
+     return myTodo;
    }
 
   

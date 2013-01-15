@@ -6,6 +6,18 @@ class Todo {
   Date complete;
 
   Todo(this.todoText);
+  
+  
+  Todo.fromBson(Map bsonMap) : todoText = bsonMap['todoText'], complete = bsonMap['complete'] {
+    id =  bsonMap['_id'].value.toString();
+    print("this is waht the bson map looks like ${bsonMap}");
+    if (complete == 'null') {
+      complete = null;
+    } else {
+      complete = new Date.fromString(complete);
+    }
+  }
+  
   Todo.fromJson(Map jsonMap) : id = jsonMap['id'], todoText = jsonMap['todoText'], complete = jsonMap['complete'] {
     if (complete == 'null') {
       complete = null;
@@ -13,6 +25,7 @@ class Todo {
       complete = new Date.fromString(complete);
     }
   }
+
 
   def isValid() {
     return !todoText.isEmpty;
