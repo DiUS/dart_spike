@@ -9,17 +9,62 @@ class TodoView {
   TodoView(this.todo);
 
   def renderTodoHtml() {
-    return new Element.html(
-      '<div id="todo-${this.todo.id}" class="todo">'
-      '  <input type="checkbox" ${isChecked()}>'
-      '  <h4>${this.todo.todoText}</h4>'
-      '  <div class="completed"></div>'
+    var el = new Element.html(
+      '<div id="todo-${this.todo.id}" class="row todo ${completedClass()}" data-id="${this.todo.id}">'
+      '  <input class="todo-check" type="checkbox" ${checked()}>'
+      '  <div class="todoText">${this.todo.todoText}</div>'
+      '  <div class="completedDate">${completed()}</div>'
       '</div>'
     );
+
+    el.on.click.add(handleClick);
+
+    return el;
   }
 
   def isChecked() {
-    return todo.complete != null ? 'checked="checked"' : '';
+    return todo.complete != null;
+  }
+
+  def checked() {
+    return isChecked() ? 'checked="checked"' : '';
+  }
+
+  def completed() {
+    return todo.complete == null ? '' : todo.complete.toString();
+  }
+
+  def completedClass() {
+    return todo.complete == null ? '' : 'completed';
+  }
+
+  def handleClick(Event e) {
+    if (isChecked()) {
+      todo.complete = null;
+    } else {
+      todo.complete = new Date.now();
+    }
+    var data = JSON.stringify(todo);
+    var request = new HttpRequest();
+    request.open("PUT", "/todos/${todo.id}?payload=$data");
+    request.send(data);
+    updateView();
+  }
+
+  def updateView() {
+    def todoElement = query("#todo-${this.todo.id}");
+    todoElement.classes.toggle('completed');
+    todoElement.query(".completedDate").text = completed();
+  }
+
+  static def fromElement(Element element) {
+    def todo = new Todo(element.query(".todoText").text);
+    todo.id = element.dataAttributes['id'];
+    def complete = element.query(".completedDate").text;
+    if (!complete.isEmpty) {
+      todo.complete = new Date.fromString(complete);
+    }
+    return todo;
   }
 }
 
@@ -71,16 +116,32 @@ void handleSubmit(Event e) {
 void loadList() {
   def request = new HttpRequest.get('/todos', (request) {
     def json = JSON.parse(request.responseText);
-    json.keys.forEach((key) {
-      var view = new TodoView(new Todo.fromJson(json[key]));
+    json.values.forEach((todoJson) {
+      var view = new TodoView(new Todo.fromJson(todoJson));
       query('#todo-list').children.add(view.renderTodoHtml());
     });
   });
 }
 
+void handleClearCompleted(Event e) {
+  for (var child in query('#todo-list').children) {
+    var todo = TodoView.fromElement(child);
+    if (todo.complete != null) {
+      var data = JSON.stringify(todo);
+      var request = new HttpRequest();
+      request.open("DELETE", "/todos/${todo.id}?payload=$data");
+      request.send(data);
+      child.remove();
+    }
+  }
+}
+
 main() {
   var todoForm = query('#new-todo');
   todoForm.on.submit.add(handleSubmit);
+
+  var deleteButton = query('#delete-button');
+  deleteButton.on.click.add(handleClearCompleted);
 
   // load the current list
   loadList();

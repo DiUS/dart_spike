@@ -4,6 +4,7 @@ body {
 
 #todo-list {
     width: 500px;
+    padding-bottom: 20px;
 }
 
 .todo input[type='checkbox'] {
@@ -11,9 +12,17 @@ body {
     margin-right: 5px;
 }
 
-.todo h4 {
+.todo .todoText {
+    float: left;
+    font-weight: bolder;
 }
 
-.todo .completed {
+.todo .completedDate {
     float: right;
+}
+
+.todo.completed {
+    font-style: italic;
+    font-variant: inherit;
+    font-weight: lighter;
 }
