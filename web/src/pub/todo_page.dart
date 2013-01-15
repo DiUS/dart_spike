@@ -7,7 +7,7 @@ void handleSubmit(Event e) {
   e.preventDefault();
   var input = query("#new-todo input");
   var todo = new Todo(input.value);
-  if (todoText.isValid()) {
+  if (todo.isValid()) {
     var data = JSON.stringify(todo);
     var request = new HttpRequest();
 

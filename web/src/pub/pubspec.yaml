@@ -2,4 +2,3 @@ name: 'client'
 dependencies:
   js: { hosted: js }
   todo:
-    git: git://github.com/DiUS/dart_spike/web/src/todo
