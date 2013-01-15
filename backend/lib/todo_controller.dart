@@ -40,7 +40,7 @@ class TodoController {
           getFromMongo(response);
         } else if (request.method == 'POST') {
 
-          setIntoMongo(nextTodoKey,request.queryParameters["payload"]);
+          setIntoMongo(request.queryParameters["payload"]);
           var todo = new Todo.fromJson(JSON.parse(request.queryParameters["payload"]));
           todo.id = nextTodoKey++;
           print("adding $todo to my list");
@@ -69,7 +69,7 @@ class TodoController {
       }
   }
 
-  setIntoMongo(String nextTodoKey, String todoAsJson) {
+  setIntoMongo(String todoAsJson) {
    
     Db db = new Db("mongodb://127.0.0.1/testdb:27017");
     db.open().then((c){
@@ -80,8 +80,8 @@ class TodoController {
       Map todo = JSON.parse(todoAsJson);
       print("parsed json todo ${todo}");
       Map savedBlogPost = new Map();
-      savedBlogPost["todo"] = todo["todo"];      //explicitly read and written for purpose of example
-      savedBlogPost["id"] = nextTodoKey;  //explicitly read and written for purpose of example
+      savedBlogPost["todoText"] = todo["todoText"];      //explicitly read and written for purpose of example
+      savedBlogPost["complete"] = todo["complete"];
       _posts.insert(savedBlogPost);  //  add the post to mongodb collection
       db.close();
     });
@@ -129,8 +129,7 @@ class TodoController {
        DbCollection _posts = db.collection("posts");
 
        Future onEachHasCompleted = _posts.find().each((v)=>
-           //print("here is ${JSON.stringify(v)}"));  
-         jsonObjects.add(JSON.stringify(v)));
+         jsonObjects.add(JSON.stringify(new Todo(v))));
        
        
 
@@ -144,5 +143,6 @@ class TodoController {
      return completer.future;
      
    }
+
   
 }

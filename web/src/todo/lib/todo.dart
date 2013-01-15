@@ -1,7 +1,7 @@
 library todo;
 
 class Todo {
-  num id;
+  String id;
   String todoText;
   Date complete;
 
