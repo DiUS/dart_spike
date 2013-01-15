@@ -1,0 +1,19 @@
+body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+#todo-list {
+    width: 500px;
+}
+
+.todo input[type='checkbox'] {
+    float: left;
+    margin-right: 5px;
+}
+
+.todo h4 {
+}
+
+.todo .completed {
+    float: right;
+}
