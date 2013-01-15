@@ -129,8 +129,7 @@ void handleClearCompleted(Event e) {
     if (todo.complete != null) {
       var data = JSON.stringify(todo);
       var request = new HttpRequest();
-      request.open("DELETE", "/todos/${todo.id}?payload=$data");
-      request.send(data);
+      request.open("DELETE", "/todos/${todo.id}");
       child.remove();
     }
   }

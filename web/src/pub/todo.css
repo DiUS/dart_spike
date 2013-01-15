@@ -15,6 +15,7 @@ body {
 .todo .todoText {
     float: left;
     font-weight: bolder;
+    text-decoration: inherit;
 }
 
 .todo .completedDate {
@@ -25,4 +26,5 @@ body {
     font-style: italic;
     font-variant: inherit;
     font-weight: lighter;
+    text-decoration: line-through;
 }
