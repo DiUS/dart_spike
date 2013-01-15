@@ -116,7 +116,7 @@ void handleSubmit(Event e) {
 void loadList() {
   def request = new HttpRequest.get('/todos', (request) {
     def json = JSON.parse(request.responseText);
-    json.values.forEach((todoJson) {
+    json.forEach((todoJson) {
       var view = new TodoView(new Todo.fromJson(todoJson));
       query('#todo-list').children.add(view.renderTodoHtml());
     });
