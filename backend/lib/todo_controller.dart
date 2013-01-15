@@ -37,9 +37,9 @@ class TodoController {
     
     if(isBaseTodoRequest.hasMatch(request.path)) {
         if(request.method == 'GET') {
-          getFromMongo();
+          getFromMongo(response);
           print("the list beiung passed back ${todoList}");
-          response.contentLength = JSON.stringify(todoList).length;
+          //response.contentLength = 2000;
           response.outputStream.write(JSON.stringify(todoList).charCodes);
         } else if (request.method == 'POST') {
 
@@ -90,16 +90,60 @@ class TodoController {
 
     }
   
-  getFromMongo() {
+   Future getFromMongo(HttpResponse response) {
+     Future todos = getTodosFromDatabase();
+     
+     todos.then((todoList) {
+
+       String todoListAsString = JSON.stringify(todoList);
+       print("writing out the todoList ${todoList}");
+       //response.contentLength = response.contentLength+todoListAsString.length;
+       response.outputStream.write(todoListAsString.charCodes);
+     });
+
+     print("setup todos to write to response");
+     
+     Futures.wait([todos]).then((x){
+       print("after todo is complete then close reponse");
+       response.outputStream.close();
+       }); 
+
+     
+
+  }
+
+
+   
+   
+   
+   Future<List<String>> getTodosFromDatabase() {
+
+     var completer = new Completer();
+     
+
+
+     Db db = new Db("mongodb://127.0.0.1/testdb:27017");
+     db.open().then((c){
+
+       List<String> jsonObjects = new List();
+       print("getting stuff from mongo in future");
+       DbCollection _posts = db.collection("posts");
+
+       Future onEachHasCompleted = _posts.find().each((v)=>
+           //print("here is ${JSON.stringify(v)}"));  
+         jsonObjects.add(JSON.stringify(v)));
+       
+       
+
+       onEachHasCompleted.then((x) {
+       print("each has completed");
+
+       print("this is the json objects that are present after complete ${jsonObjects}");
+       completer.complete(jsonObjects);});
+     });
     
-    Db db = new Db("mongodb://127.0.0.1/testdb:27017");
-    db.open().then((c){
-        print("getting stuff from mongo");
-        DbCollection _posts = db.collection("posts");
-        _posts.find(where.match('todo', '.*')).each((v)=>print(v));
-    });
-
-
-    }
+     return completer.future;
+     
+   }
   
 }

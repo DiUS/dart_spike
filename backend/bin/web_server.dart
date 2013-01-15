@@ -56,7 +56,7 @@ startServer() {
       } else if(TodoController.isTodoRequest.hasMatch(request.path)){
         response.headers.set(HttpHeaders.ACCEPT,'application/json');
         new TodoController().handleTodo(request,response);
-        response.outputStream.close();
+        //response.outputStream.close();
       } else{
         send404(response);
       }
