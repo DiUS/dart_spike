@@ -19,6 +19,14 @@ class TodoController {
   static num nextTodoKey = 1;
   
   
+  TodoController(){
+
+
+    // uncomment the following line to remove all the posts at app startup
+    //_posts.remove();
+    
+  }
+  
   handleTodo(HttpRequest request, HttpResponse response){
     
     //var sampleNounId = isTodoRequest.firstMatch(request.path)[1];
@@ -28,11 +36,13 @@ class TodoController {
     
     if(isBaseTodoRequest.hasMatch(request.path)){
         if(request.method == 'GET'){
+          getFromMongo();
           print("the list beiung passed back ${todoList}");
           response.contentLength = JSON.stringify(todoList).length;
           response.outputStream.write(JSON.stringify(todoList).charCodes);
         }else if (request.method == 'POST'){
   
+          setIntoMongo(nextTodoKey,request.queryParameters["payload"]);
           print("adding ${request.queryParameters["payload"]} to my list");
           todoList[(nextTodoKey++).toString()] = request.queryParameters["payload"];
         }
@@ -53,9 +63,37 @@ class TodoController {
         }          
       }
   }
-  
 
- 
+  setIntoMongo(String nextTodoKey, String todoAsJson) {
+   
+    Db db = new Db("mongodb://127.0.0.1/testdb:27017");
+    db.open().then((c){
+      print('connection open');//open the connection to mongodb
+    DbCollection _posts = db.collection("posts");
+    
+      print("adding todo: ${todoAsJson}");
+      Map todo = JSON.parse(todoAsJson);
+      print("parsed json todo ${todo}");
+      Map savedBlogPost = new Map();
+      savedBlogPost["todo"] = todo["todo"];      //explicitly read and written for purpose of example
+      savedBlogPost["id"] = nextTodoKey;  //explicitly read and written for purpose of example
+      _posts.insert(savedBlogPost);  //  add the post to mongodb collection
+      db.close();
+    });
+
+
+    }
   
+  getFromMongo() {
+    
+    Db db = new Db("mongodb://127.0.0.1/testdb:27017");
+    db.open().then((c){
+        print("getting stuff from mongo");
+        DbCollection _posts = db.collection("posts");
+        _posts.find(where.match('todo', '.*')).each((v)=>print(v));
+    });
+
+
+    }
   
 }
