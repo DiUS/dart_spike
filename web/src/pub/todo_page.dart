@@ -1,13 +1,14 @@
 import 'dart:html';
 import 'json.dart';
 import 'package:js/js.dart' as js;
+import 'package:todo/todo.dart';
 
 void handleSubmit(Event e) {
   e.preventDefault();
   var input = query("#new-todo input");
-  var todoText = input.value;
-  if (!todoText.isEmpty) {
-    var data = JSON.stringify({'todo': todoText});
+  var todo = new Todo(input.value);
+  if (todoText.isValid()) {
+    var data = JSON.stringify(todo);
     var request = new HttpRequest();
 
 
