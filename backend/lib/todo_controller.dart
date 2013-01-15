@@ -65,7 +65,9 @@ class TodoController {
           String disiredTodo = todoList.remove(matchingTodo);
         }        
         else if(request.method == 'PUT'){
-          String disiredTodo = todoList[matchingTodo] = request.queryParameters["payload"];
+          todoList[matchingTodo] = new Todo.fromJson(JSON.parse(request.queryParameters["payload"]));
+          response.contentLength = JSON.stringify(todoList[matchingTodo]).length;
+          response.outputStream.write(JSON.stringify(todoList[matchingTodo]).charCodes);
         }          
       }
   }

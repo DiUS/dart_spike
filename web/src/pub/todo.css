@@ -1,0 +1,30 @@
+body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+#todo-list {
+    width: 500px;
+    padding-bottom: 20px;
+}
+
+.todo input[type='checkbox'] {
+    float: left;
+    margin-right: 5px;
+}
+
+.todo .todoText {
+    float: left;
+    font-weight: bolder;
+    text-decoration: inherit;
+}
+
+.todo .completedDate {
+    float: right;
+}
+
+.todo.completed {
+    font-style: italic;
+    font-variant: inherit;
+    font-weight: lighter;
+    text-decoration: line-through;
+}
