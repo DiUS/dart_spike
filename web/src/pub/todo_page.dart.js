@@ -56,13 +56,6 @@ $$.ConstantMap = {"":"Object;length>,_jsObject,_liblib$_keys>",
   var t1 = this._liblib$_keys;
   $.getInterceptor$JSArray(t1).forEach$1(t1, new $.ConstantMap_forEach_anon(this, f));
 },
- get$values: function() {
-  var result, t1;
-  result = [];
-  t1 = this._liblib$_keys;
-  $.getInterceptor$JSArray(t1).forEach$1(t1, new $.ConstantMap_values_anon(this, result));
-  return result;
-},
  get$isEmpty: function() {
   return $.eq(this.length, 0);
 },
@@ -771,14 +764,6 @@ $$._HashMapImpl = {"":"Object;_keys>,_values,_loadLimit,_numberOfEntries,_number
     }
   }
 },
- get$values: function() {
-  var t1, list;
-  t1 = {};
-  list = $.List_List(this.get$length());
-  t1.i_0 = 0;
-  this.forEach$1(new $._HashMapImpl_values_anon(t1, list));
-  return list;
-},
  containsKey$1: function(key) {
   return !$.eqB(this._probeForLookup$1(key), -1);
 },
@@ -826,14 +811,6 @@ $$._LinkedHashMapImpl = {"":"Object;_list,_map",
     return;
   entry.remove$0();
   return entry.get$element().get$value();
-},
- get$values: function() {
-  var t1, list;
-  t1 = {};
-  list = $.List_List(this.get$length());
-  t1.index_0 = 0;
-  this._list.forEach$1(new $._LinkedHashMapImpl_values_anon(t1, list));
-  return list;
 },
  forEach$1: function(f) {
   this._list.forEach$1(new $._LinkedHashMapImpl_forEach_anon(f));
@@ -2112,56 +2089,6 @@ $$._AttributeMap = {"":"Object;_liblib0$_element>",
       return keys;
   }
 },
- get$values: function() {
-  var attributes, values, t1, len, i;
-  attributes = this._liblib0$_element.attributes;
-  if (typeof attributes !== 'string' && (typeof attributes !== 'object' || attributes === null || attributes.constructor !== Array && !attributes.is$JavaScriptIndexingBehavior()))
-    return this.get$values$bailout(1, attributes);
-  values = $.List_List(null);
-  t1 = $.getInterceptor$JSStringJSArray(attributes);
-  len = attributes.length;
-  i = 0;
-  for (; i < len; ++i) {
-    if (i >= attributes.length)
-      throw $.ioore(i);
-    if (this._matches$1(attributes[i]) === true) {
-      if (i >= attributes.length)
-        throw $.ioore(i);
-      values.push(attributes[i].get$value());
-    }
-  }
-  return values;
-},
- get$values$bailout: function(state0, env0, env1, env2, env3) {
-  switch (state0) {
-    case 1:
-      attributes = env0;
-      break;
-    case 2:
-      values = env3;
-      len = env2;
-      attributes = env1;
-      t1 = env0;
-      break;
-  }
-  switch (state0) {
-    case 0:
-      attributes = this._liblib0$_element.attributes;
-    case 1:
-      state0 = 0;
-      values = $.List_List(null);
-      t1 = $.getInterceptor$JSStringJSArray(attributes);
-      len = t1.get$length(attributes);
-    case 2:
-      var attributes, values, t1, len, i;
-      state0 = 0;
-      i = 0;
-      for (; $.ltB(i, len); ++i)
-        if (this._matches$1(t1.operator$index$1(attributes, i)) === true)
-          values.push(t1.operator$index$1(attributes, i).get$value());
-      return values;
-  }
-},
  get$isEmpty: function() {
   return $.eq(this.get$length(), 0);
 },
@@ -2223,13 +2150,6 @@ $$._DataAttributeMap = {"":"Object;$$dom_attributes>",
   t1 = this.$$dom_attributes;
   $.getInterceptor$JSArray(t1).forEach$1(t1, new $._DataAttributeMap_keys_anon(this, keys));
   return keys;
-},
- get$values: function() {
-  var values, t1;
-  values = $.List_List(null);
-  t1 = this.$$dom_attributes;
-  $.getInterceptor$JSArray(t1).forEach$1(t1, new $._DataAttributeMap_values_anon(this, values));
-  return values;
 },
  get$length: function() {
   var t1 = this.get$keys();
@@ -3289,8 +3209,8 @@ $$.Todo = {"":"Object;id>,todoText>,complete=",
 
 $$.loadList_anon = {"":"Closure;",
  call$1: function(request) {
-  var t1 = $.JSON_parse(request.get$responseText()).get$values();
-  $.getInterceptor$JSArray(t1).forEach$1(t1, new $.loadList__anon());
+  var json = $.JSON_parse(request.get$responseText());
+  $.getInterceptor$JSArray(json).forEach$1(json, new $.loadList__anon());
 }
 };
 
@@ -3555,55 +3475,6 @@ $$._HttpRequestUtils_get_anon = {"":"Closure;onSuccess_0,request_1",
     t2 = false;
   if (t2)
     this.onSuccess_0.call$1(t1);
-}
-};
-
-$$.Storage_values_anon = {"":"Closure;values_0",
- call$2: function(k, v) {
-  var t1 = this.values_0;
-  return $.getInterceptor$JSArray(t1).add$1(t1, v);
-}
-};
-
-$$._LinkedHashMapImpl_values_anon = {"":"Closure;box_0,list_1",
- call$1: function(entry) {
-  var t1, t2, t3;
-  t1 = this.list_1;
-  t2 = this.box_0;
-  t3 = t2.index_0;
-  t2.index_0 = $.add(t3, 1);
-  $.indexSet(t1, t3, entry.get$value());
-}
-};
-
-$$._HashMapImpl_values_anon = {"":"Closure;box_0,list_1",
- call$2: function(key, value) {
-  var t1, t2, t3;
-  t1 = this.list_1;
-  t2 = this.box_0;
-  t3 = t2.i_0;
-  t2.i_0 = $.add(t3, 1);
-  $.indexSet(t1, t3, value);
-}
-};
-
-$$._DataAttributeMap_values_anon = {"":"Closure;this_0,values_1",
- call$2: function(key, value) {
-  var t1;
-  if ($.getInterceptor$JSString(key).startsWith$1(key, "data-") === true) {
-    t1 = this.values_1;
-    $.getInterceptor$JSArray(t1).add$1(t1, value);
-  }
-}
-};
-
-$$.ConstantMap_values_anon = {"":"Closure;this_0,result_1",
- call$1: function(key) {
-  var t1, t2, t3;
-  t1 = this.result_1;
-  t2 = $.getInterceptor$JSArray(t1);
-  t3 = this.this_0;
-  return t2.add$1(t1, $.getInterceptor$JSStringJSArray(t3).operator$index$1(t3, key));
 }
 };
 
@@ -4931,8 +4802,8 @@ $._DateImpl__DateImpl$fromString = function(formattedString) {
     t1 = $.getInterceptor$JSNumber(t1).round$0(t1);
     millisecond = $.getInterceptor$JSNumber(t1).toInt$0(t1);
     if ($.eqB(millisecond, 1000)) {
-      millisecond = 999;
       addOneMillisecond = true;
+      millisecond = 999;
     } else
       addOneMillisecond = false;
     isUtc = !(t3.operator$index$1(match, 8) == null) && !$.eqB(t3.operator$index$1(match, 8), "");
@@ -5490,31 +5361,30 @@ $.CONSTANT4 = new Isolate.$isolateProperties.JSNumber();
 $._DateImpl__MAX_MILLISECONDS_SINCE_EPOCH = 8640000000000000;
 $.HttpRequest_DONE = 4;
 $._cachedBrowserPrefix = null;
-$._HashMapImpl__DELETED_KEY = Isolate.$isolateProperties.CONSTANT3;
-$.Primitives_hashCodeSeed = 0;
-$._HashMapImpl__INITIAL_CAPACITY = 8;
 $._JsonParser_BACKSPACE = 8;
 $._JsonParser_TAB = 9;
-$.Primitives_DOLLAR_CHAR_VALUE = 36;
+$._HashMapImpl__DELETED_KEY = Isolate.$isolateProperties.CONSTANT3;
 $._JsonParser_NEW_LINE = 10;
+$._HashMapImpl__INITIAL_CAPACITY = 8;
 $._JsonParser_FORM_FEED = 12;
 $._JsonParser_CARRIAGE_RETURN = 13;
 $._JsonParser_SPACE = 32;
 $._JsonParser_QUOTE = 34;
+$.Primitives_hashCodeSeed = 0;
 $._JsonParser_PLUS = 43;
-$._getTypeNameOf = null;
 $._JsonParser_COMMA = 44;
-$._JsonParser_DOT = 46;
-$._JsonParser_SLASH = 47;
 $._JsonParser_MINUS = 45;
+$._JsonParser_DOT = 46;
+$.Primitives_DOLLAR_CHAR_VALUE = 36;
+$._JsonParser_SLASH = 47;
 $._JsonParser_CHAR_0 = 48;
 $._JsonParser_CHAR_1 = 49;
 $._JsonParser_CHAR_2 = 50;
 $._JsonParser_CHAR_3 = 51;
+$._getTypeNameOf = null;
 $._JsonParser_CHAR_4 = 52;
 $._JsonParser_CHAR_5 = 53;
 $._JsonParser_CHAR_6 = 54;
-$._JsonParser_CHAR_7 = 55;
 $._JsonParser_CHAR_8 = 56;
 $._JsonParser_CHAR_9 = 57;
 $._JsonParser_COLON = 58;
@@ -5522,6 +5392,7 @@ $._JsonParser_CHAR_CAPITAL_E = 69;
 $._JsonParser_LBRACKET = 91;
 $._JsonParser_BACKSLASH = 92;
 $._JsonParser_RBRACKET = 93;
+$._JsonParser_CHAR_7 = 55;
 $._JsonParser_CHAR_B = 98;
 $._JsonParser_CHAR_E = 101;
 $._JsonParser_CHAR_F = 102;
@@ -6249,11 +6120,6 @@ $.$defineNativeClass('Storage', {
     f.call$2(key, this.operator$index$1(key));
   }
 },
- get$values: function() {
-  var values = [];
-  this.forEach$1(new $.Storage_values_anon(values));
-  return values;
-},
  get$length: function() {
   return this.length;
 },
@@ -6371,9 +6237,6 @@ $.$defineNativeClass('XPathException', {
 }
 });
 
-$.$defineNativeClass('SVGFEColorMatrixElement', {"":"values>"
-});
-
 $.$defineNativeClass('SVGElement', {
  get$classes: function() {
   if (this._cssClassSet == null)
@@ -6417,7 +6280,7 @@ $.$defineNativeClass('SVGException', {
 }
 });
 
-// 50 dynamic classes.
+// 49 dynamic classes.
 // 234 classes
 // 21 !leaf
 (function() {
