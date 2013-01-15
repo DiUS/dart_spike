@@ -37,6 +37,7 @@ class TodoController {
     
     if(isBaseTodoRequest.hasMatch(request.path)) {
         if(request.method == 'GET') {
+          getFromMongo();
           print("the list beiung passed back ${todoList}");
           response.contentLength = JSON.stringify(todoList).length;
           response.outputStream.write(JSON.stringify(todoList).charCodes);
