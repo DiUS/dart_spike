@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:json'; 
 import "package:json_object/json_object.dart";
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:todo/todo.dart';
 
 class TodoController {
   
@@ -34,17 +35,21 @@ class TodoController {
     print("matches isBaseTodoRequest ${isBaseTodoRequest.hasMatch(request.path)}");
     print("matches isASpecficTodoRequest ${isASpecficTodoRequest.hasMatch(request.path)}");
     
-    if(isBaseTodoRequest.hasMatch(request.path)){
-        if(request.method == 'GET'){
-          getFromMongo();
+    if(isBaseTodoRequest.hasMatch(request.path)) {
+        if(request.method == 'GET') {
           print("the list beiung passed back ${todoList}");
           response.contentLength = JSON.stringify(todoList).length;
           response.outputStream.write(JSON.stringify(todoList).charCodes);
-        }else if (request.method == 'POST'){
-  
+        } else if (request.method == 'POST') {
+
           setIntoMongo(nextTodoKey,request.queryParameters["payload"]);
-          print("adding ${request.queryParameters["payload"]} to my list");
-          todoList[(nextTodoKey++).toString()] = request.queryParameters["payload"];
+          var todo = new Todo.fromJson(JSON.parse(request.queryParameters["payload"]));
+          todo.id = nextTodoKey++;
+          print("adding $todo to my list");
+          todoList[todo.id.toString()] = todo;
+          def todoJson = JSON.stringify(todo);
+          response.contentLength = todoJson.length;
+          response.outputStream.write(todoJson.charCodes);
         }
       } else if(isASpecficTodoRequest.hasMatch(request.path)){
         String matchingTodo = isASpecficTodoRequest.firstMatch(request.path)[1];

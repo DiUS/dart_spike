@@ -1,4 +1,5 @@
 .idea/
 *.iml
 backend/packages/
-web/src/pub/packages/
+web/src/pub/packages/js
+web/src/pub/packages/unittest
